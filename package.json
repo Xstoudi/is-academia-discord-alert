@@ -1,0 +1,28 @@
+{
+	"name": "is-academia-discord-alert",
+	"version": "1.0.0",
+	"description": "Trigger Discord webhook as a new grade is added on IS-Academia",
+	"type": "module",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"isa",
+		"is",
+		"academia",
+		"is-academia",
+		"he-arc",
+		"alert",
+		"alerte"
+	],
+	"author": "Xavier Stouder <xavier@stouder.io> (https://stouder.io)",
+	"license": "MIT",
+	"dependencies": {
+		"dotenv": "^10.0.0",
+		"luxon": "^2.1.1",
+		"pupeteer": "^0.0.1",
+		"puppeteer": "^12.0.0",
+		"webhook-discord": "^3.7.8"
+	}
+}
