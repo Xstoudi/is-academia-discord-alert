@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer-core'
 import dotenv from 'dotenv'
 import { Webhook, MessageBuilder } from 'webhook-discord'
 import { DateTime } from 'luxon'
@@ -49,7 +49,11 @@ async function sendAwake() {
 }
 
 async function fetchGrades() {
-	const browser = await puppeteer.launch()
+	const browser = await puppeteer.launch({
+		pipe: true,
+		executablePath: '/usr/bin/chromium-browser',
+		args: ['--no-sandbox'],
+	})
 	const page = await browser.newPage()
 
 	await page.goto(process.env.ISA_URL)
@@ -92,29 +96,26 @@ async function fetchGrades() {
 					}
 				}
 			})
-		console.log(currentGrades)
 		return currentGrades
 	})
 
-	//await browser.close()
+	await browser.close()
 
 	return currentGrades
 }
 
 async function diffGrades(currentGrades, oldGrades) {
-	console.log(oldGrades)
-	console.log(currentGrades)
 	return Object.keys(currentGrades).filter(
 		subject => currentGrades[subject].length > oldGrades[subject].length
 	)
 }
 
 async function main() {
-	let oldGrades = (await fetchGrades().catch(err => console.log(err))) ?? null
-	oldGrades['2233.2 - Mathématiques spécifiques I - Cours'] = []
+	let oldGrades = await fetchGrades()
 	while (true) {
 		const newGrades = await fetchGrades()
 		const subjects = await diffGrades(newGrades, oldGrades)
+
 		for (const subject of subjects) {
 			discordMessage.setDescription(
 				`Nouvelle note dans la matière suivante :\n**${subject}**`
