@@ -49,13 +49,6 @@ async function sendAwake() {
 }
 
 async function fetchGrades() {
-	const browser = await puppeteer.launch({
-		pipe: true,
-		executablePath: '/usr/bin/chromium-browser',
-		args: ['--no-sandbox'],
-	})
-	const page = await browser.newPage()
-
 	await page.goto(process.env.ISA_URL)
 	await page.waitForSelector(config.isaLoginButtonId)
 	await page.click(config.isaLoginButtonId)
@@ -131,6 +124,13 @@ async function main() {
 		await timeout(60000)
 	}
 }
+
+const browser = await puppeteer.launch({
+	pipe: true,
+	executablePath: '/usr/bin/chromium-browser',
+	args: ['--no-sandbox'],
+})
+const page = await browser.newPage()
 
 await sendAwake()
 await main()
