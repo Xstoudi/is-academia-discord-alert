@@ -92,8 +92,6 @@ async function fetchGrades() {
 		return currentGrades
 	})
 
-	await browser.close()
-
 	return currentGrades
 }
 
@@ -132,5 +130,9 @@ const browser = await puppeteer.launch({
 })
 const page = await browser.newPage()
 
-await sendAwake()
-await main()
+try {
+	await sendAwake()
+	await main()
+} catch (err) {
+	await browser.close()
+}
